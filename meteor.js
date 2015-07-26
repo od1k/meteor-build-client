@@ -55,7 +55,7 @@ module.exports = {
         // remove the bundle folder
         deleteFolderRecursive(buildPath);
 
-        var command = 'meteor build '+ argPath + ' --directory';
+        var command = 'meteor build '+ argPath + ' --directory --debug';
 
         if(program.url)
              command += ' --server '+ program.url;
@@ -149,7 +149,7 @@ module.exports = {
             settings.PUBLIC_SETTINGS = settingsJson.public;
 
         scripts = scripts.replace('__meteor_runtime_config__', '<script type="text/javascript">__meteor_runtime_config__ = JSON.parse(decodeURIComponent("'+encodeURIComponent(JSON.stringify(settings))+'"));</script>');
-        
+
         // add Meteor.disconnect() when no server is given
         // if(!program.ddp)
             scripts += '        <script type="text/javascript">Meteor.disconnect();</script>';
