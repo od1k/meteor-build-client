@@ -18,7 +18,7 @@ var argPath = process.argv[2],
 var execute = function(command, name) {
     return new Q(function(resolve, reject) {
         spinner.start();
-        
+
         spawn(command[0], command.slice(1), {
             cwd: basePath
         },function(err, stdout, stderr) {
@@ -26,7 +26,7 @@ var execute = function(command, name) {
 
             if (err){
                 console.log(err.message);
-                
+
                 reject(err);
             } else {
                 resolve({
@@ -34,7 +34,7 @@ var execute = function(command, name) {
                     stderr: stderr,
                 });
             }
-        });        
+        });
     });
 };
 
@@ -68,7 +68,7 @@ module.exports = {
                 command.push(program.url);
             }
 
-            return execute(command, 'build the app, are you in your meteor apps folder?');                        
+            return execute(command, 'build the app, are you in your meteor apps folder?');
         });
     },
     move: function(){
@@ -90,7 +90,7 @@ module.exports = {
                 });
             } catch(e) {
                 // do nothing
-            }            
+            }
         });
     },
     addIndexFile: function(program) {
@@ -152,7 +152,7 @@ module.exports = {
                 'meteorRelease': starJson.meteorRelease,
                 'ROOT_URL_PATH_PREFIX': '',
                 meteorEnv: { NODE_ENV: 'production' },
-                // 'DDP_DEFAULT_CONNECTION_URL': program.url || '', // will reload infinite if Meteor.disconnect is not called
+                'DDP_DEFAULT_CONNECTION_URL': program.url || '', // will reload infinite if Meteor.disconnect is not called
                 // 'appId': process.env.APP_ID || null,
                 // 'autoupdateVersion': null, // "ecf7fcc2e3d4696ea099fdd287dfa56068a692ec"
                 // 'autoupdateVersionRefreshable': null, // "c5600e68d4f2f5b920340f777e3bfc4297127d6e"
@@ -167,10 +167,10 @@ module.exports = {
                 settings.PUBLIC_SETTINGS = settingsJson.public;
 
             scripts = scripts.replace('__meteor_runtime_config__', '<script type="text/javascript">__meteor_runtime_config__ = JSON.parse(decodeURIComponent("'+encodeURIComponent(JSON.stringify(settings))+'"));</script>');
-            
+
             // add Meteor.disconnect() when no server is given
-            if(!program.url)
-                scripts += '        <script type="text/javascript">Meteor.disconnect();</script>';
+            // if(!program.url)
+            //     scripts += '        <script type="text/javascript">Meteor.disconnect();</script>';
 
             content = content.replace(/{{ *> *scripts *}}/, scripts);
 
@@ -187,7 +187,7 @@ module.exports = {
                 fs.unlinkSync(path.join(buildPath, 'head.html'));
             } catch (e){
                 console.log("Didn't unlink head.html; doesn't exist.");
-            }            
+            }
         });
     }
 }
