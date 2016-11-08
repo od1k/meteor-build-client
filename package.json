@@ -1,6 +1,6 @@
 {
   "name": "meteor-build-client",
-  "version": "0.1.6",
+  "version": "0.4.1",
   "description": "A bundles the client part of a Meteor app.",
   "author": "Fabian Vogelsteller <fabian@frozeman.de>",
   "contributors": [
@@ -30,6 +30,8 @@
   },
   "main": "main.js",
   "dependencies": {
+    "bluebird": "^3.4.6",
+    "buffered-spawn": "^3.3.2",
     "commander": "^2.8.1",
     "simple-spinner": "0.0.3",
     "underscore": "^1.8.3"

@@ -19,6 +19,9 @@ so it can be hosted on any server or even loaded via the `file://` protocol.
     // run meteor-build-client
     $ meteor-build-client ../myOutputFolder
 
+**Warning** the content of the output folder will be deleted before building the new output! So dont do things like
+`$ meteor-build-client /home`!
+
 ### Output
 
 The content of the output folder could look as follows:
@@ -46,6 +49,10 @@ You can pass an additional settings file using the `--settings` or `-s` option:
 Additionally you can set the `ROOT_URL` of your app using the `--url` or `-u` option:
 
     $ meteor-build-client ../myOutputFolder -u http://myserver.com
+
+If you pass `"default"`, your app will try to connect to the server where the application was served from.
+
+If this option was not set, it will set the server to `""` (empty string) and will add a `Meteor.disconnect()` after Meteor was loaded.
 
 ### Absolute or relative paths
 
@@ -105,6 +112,28 @@ if(Meteor.isClient) {
     Meteor.connection.subscribe('users');
 
     // And then you subscribe like this:
-    DDPConnection.subscribe("mySubscription”);   
+    DDPConnection.subscribe("mySubscription");   
 }
+```
+
+## Making routing work on a non Meteor server
+
+To be able to open URLs and let them be handled by the client side JavaScript, you need to rewrite URLs on the server side, so they point always to your index.html.
+
+For apache a `.htaccess` with `mod_rewrite` could look as follow:
+```bash
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Always pass through requests for files that exist
+    # Per http://stackoverflow.com/a/7090026/223225
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule . - [L]
+
+    # Send all other requests to index.html where the JavaScript router can take over
+    # and render the requested route
+    RewriteRule ^.*$ index.html [L]
+</IfModule>
 ```
